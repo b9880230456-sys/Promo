@@ -3,22 +3,312 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Promo site</title>
+  <title>Hermes Lab — GitHub + Vercel</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; margin: 0; background: #0f172a; color: #fff; }
-    main { max-width: 760px; margin: 0 auto; padding: 80px 24px; }
-    .badge { color: #93c5fd; text-transform: uppercase; letter-spacing: .12em; font-size: 13px; }
-    h1 { font-size: clamp(36px, 7vw, 72px); line-height: .95; margin: 16px 0; }
-    p { font-size: 20px; color: #cbd5e1; }
-    a { display: inline-block; margin-top: 24px; padding: 14px 20px; border-radius: 999px; background: #38bdf8; color: #082f49; text-decoration: none; font-weight: 700; }
+    :root {
+      --bg: #070b18;
+      --card: rgba(15, 23, 42, .78);
+      --card-strong: rgba(30, 41, 59, .92);
+      --line: rgba(148, 163, 184, .22);
+      --text: #f8fafc;
+      --muted: #b6c2d3;
+      --blue: #38bdf8;
+      --violet: #8b5cf6;
+      --green: #34d399;
+      --orange: #f59e0b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(56, 189, 248, .22), transparent 30%),
+        radial-gradient(circle at 86% 8%, rgba(139, 92, 246, .24), transparent 32%),
+        radial-gradient(circle at 60% 95%, rgba(52, 211, 153, .12), transparent 35%),
+        var(--bg);
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 46px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+      gap: 24px;
+      align-items: stretch;
+      min-height: 520px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(15, 23, 42, .82), rgba(15, 23, 42, .55));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
+      backdrop-filter: blur(16px);
+      border-radius: 30px;
+    }
+
+    .hero-main { padding: clamp(30px, 5vw, 56px); display: flex; flex-direction: column; justify-content: space-between; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, .12);
+      color: #bae6fd;
+      border: 1px solid rgba(56, 189, 248, .25);
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 24px var(--green); }
+
+    h1 {
+      max-width: 820px;
+      margin: 28px 0 18px;
+      font-size: clamp(42px, 7vw, 86px);
+      line-height: .9;
+      letter-spacing: -.07em;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2.4vw, 23px);
+      line-height: 1.48;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 14px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 850;
+      border: 1px solid transparent;
+    }
+
+    .button.primary { background: linear-gradient(135deg, var(--blue), var(--violet)); color: white; }
+    .button.secondary { border-color: var(--line); color: #e2e8f0; background: rgba(255, 255, 255, .04); }
+
+    .hero-side { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+    .status-card {
+      flex: 1;
+      min-height: 132px;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .055);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .status-card strong { display: block; font-size: 34px; line-height: 1; margin-bottom: 10px; }
+    .status-card span { color: var(--muted); font-size: 15px; line-height: 1.45; }
+
+    section { margin-top: 24px; }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing: -.04em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      padding: 20px;
+      min-height: 150px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+
+    .icon {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      background: rgba(56, 189, 248, .13);
+      color: #7dd3fc;
+      font-size: 20px;
+    }
+
+    .card h3 { margin: 0 0 9px; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.48; }
+
+    .business {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .business .card { min-height: 118px; }
+
+    .form-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr);
+      gap: 18px;
+      padding: 24px;
+    }
+
+    .form-copy { padding: 12px; }
+    .form-copy p { color: var(--muted); font-size: 18px; line-height: 1.55; }
+
+    form {
+      display: grid;
+      gap: 12px;
+      padding: 20px;
+      border-radius: 24px;
+      background: var(--card-strong);
+      border: 1px solid var(--line);
+    }
+
+    label { display: grid; gap: 7px; color: #dbeafe; font-weight: 700; }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid rgba(148, 163, 184, .35);
+      border-radius: 16px;
+      background: rgba(2, 6, 23, .55);
+      color: white;
+      padding: 14px 15px;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea { min-height: 105px; resize: vertical; }
+    input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(56, 189, 248, .12); }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 15px 18px;
+      color: white;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      font: inherit;
+      font-weight: 900;
+    }
+
+    .success {
+      display: none;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: rgba(52, 211, 153, .12);
+      color: #bbf7d0;
+      border: 1px solid rgba(52, 211, 153, .25);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .links p { margin: 0; color: var(--muted); }
+
+    @media (max-width: 860px) {
+      .hero, .form-wrap { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .business { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .page { width: min(100% - 22px, 1120px); padding-top: 16px; }
+      .hero-main, .hero-side, .form-wrap { padding: 18px; }
+      .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 43px; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <div class="badge">GitHub + Vercel + Hermes</div>
-    <h1>Гермес обновил сайт автоматически</h1>
-    <p>Изменение внесено агентом, отправлено в GitHub и автоматически развёрнуто через Vercel.</p>
-    <a href="https://promo-mauve.vercel.app">Открыть опубликованный сайт</a>
-  </main>
+  <div class="page">
+    <header class="hero">
+      <div class="panel hero-main">
+        <div>
+          <div class="badge"><span class="dot"></span> GitHub + Vercel + Hermes</div>
+          <h1>Гермес теперь публикует сайты сам</h1>
+          <p class="lead">Мы подключили AI-агента к GitHub и Vercel. Теперь достаточно написать задачу в чат: Гермес меняет код, отправляет его в GitHub, а Vercel автоматически выкладывает новую версию сайта.</p>
+          <div class="actions">
+            <a class="button primary" href="#lead-form">Оставить заявку</a>
+            <a class="button secondary" href="https://t.me/labhermes" target="_blank" rel="noopener">Hermes Lab в Telegram</a>
+          </div>
+        </div>
+      </div>
+      <aside class="panel hero-side" aria-label="Статусы автоматизации">
+        <div class="status-card"><strong>1</strong><span>Пишем задачу обычными словами в чат Гермесу.</span></div>
+        <div class="status-card"><strong>2</strong><span>Гермес меняет сайт и отправляет изменения в GitHub.</span></div>
+        <div class="status-card"><strong>3</strong><span>Vercel сам публикует обновление и отдаёт готовую ссылку.</span></div>
+      </aside>
+    </header>
+
+    <section>
+      <h2 class="section-title">Что умеет Гермес</h2>
+      <div class="grid">
+        <article class="card"><div class="icon">✦</div><h3>Создать сайт</h3><p>Лендинг, промо-страницу, MVP или техническую страницу под интеграцию.</p></article>
+        <article class="card"><div class="icon">✎</div><h3>Обновить контент</h3><p>Изменить тексты, структуру, блоки, CTA и визуальную подачу страницы.</p></article>
+        <article class="card"><div class="icon">▣</div><h3>Добавить форму</h3><p>Собрать заявку, контакт и задачу, а дальше подключить Telegram, CRM или почту.</p></article>
+        <article class="card"><div class="icon">↗</div><h3>Опубликовать</h3><p>Запушить изменения в GitHub, дождаться деплоя и проверить живой сайт.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Зачем это бизнесу</h2>
+      <div class="business">
+        <article class="card"><h3>Быстрые гипотезы</h3><p>Проверяем идею, оффер или рекламную страницу без долгого цикла разработки.</p></article>
+        <article class="card"><h3>Рабочие прототипы</h3><p>Можно показать клиенту не презентацию, а открытую ссылку с готовым результатом.</p></article>
+        <article class="card"><h3>Меньше ручной рутины</h3><p>Правки, публикация и проверка результата переходят от человека к агенту.</p></article>
+      </div>
+    </section>
+
+    <section class="panel form-wrap" id="lead-form">
+      <div class="form-copy">
+        <h2 class="section-title">Хотите такой же контур?</h2>
+        <p>Оставьте демо-заявку. В реальном проекте Гермес подключит форму к Telegram, CRM, почте или вашему API.</p>
+      </div>
+      <form onsubmit="event.preventDefault(); document.querySelector('.success').style.display='block'; this.reset();">
+        <label>Имя<input name="name" placeholder="Как к вам обращаться" required></label>
+        <label>Контакт<input name="contact" placeholder="Telegram или телефон" required></label>
+        <label>Задача<textarea name="task" placeholder="Что хотите автоматизировать?" required></textarea></label>
+        <button type="submit">Оставить заявку</button>
+        <div class="success">Заявка отправлена. В реальном проекте Гермес подключит её к Telegram, CRM или почте.</div>
+      </form>
+    </section>
+
+    <footer class="panel links">
+      <p>Больше практических экспериментов — в Hermes Lab</p>
+      <div class="actions" style="margin:0">
+        <a class="button secondary" href="https://t.me/labhermes" target="_blank" rel="noopener">Telegram</a>
+        <a class="button secondary" href="https://www.youtube.com/@Hermes_Lab" target="_blank" rel="noopener">YouTube</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
